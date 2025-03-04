@@ -1,5 +1,6 @@
 package dev.chapz.apollo.permissions
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.READ_MEDIA_AUDIO
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,6 +35,32 @@ fun AudioPermissionRequestButton() {
             if (!audioPermissionState.value) requestPermissionLauncher.launch(READ_MEDIA_AUDIO)
         }) {
             Text("Grant access to audio")
+        }
+    }
+}
+
+@Composable
+fun NotificationPermissionRequestButton() {
+    val context = LocalContext.current
+    val notificationPermission = remember {
+        mutableStateOf(ContextCompat.checkSelfPermission(context, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)
+    }
+
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted: Boolean ->
+            notificationPermission.value = isGranted
+        }
+    )
+
+    if (notificationPermission.value) {
+        // Permission granted, continue app functionality
+        // Your audio related code here
+    } else {
+        Button(onClick = {
+            if (!notificationPermission.value) requestPermissionLauncher.launch(POST_NOTIFICATIONS)
+        }) {
+            Text("Allow notifications")
         }
     }
 }

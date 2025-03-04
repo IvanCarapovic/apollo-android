@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.chapz.apollo"
-        minSdk = 31
+        minSdk = 33
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -54,8 +54,12 @@ dependencies {
     implementation(libs.compose.runtime.livedata)
 
     implementation(libs.kotlinx.serialization.json)
-
     implementation(libs.core)
+
+    implementation(libs.media.exoplayer)
+    implementation(libs.media.ui)
+    implementation(libs.media.common)
+    implementation(libs.media.session)
 
     implementation(libs.koin.android)
     implementation(libs.koin.compose)

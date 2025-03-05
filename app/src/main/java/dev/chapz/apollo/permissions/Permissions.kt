@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 
 @Composable
-fun AudioPermissionRequestButton() {
+fun AudioPermissionRequestButton(onAudioPermissionGranted: () -> Unit = {}) {
     val context = LocalContext.current
     val audioPermissionState = remember {
         mutableStateOf(ContextCompat.checkSelfPermission(context, READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED)
@@ -28,8 +28,7 @@ fun AudioPermissionRequestButton() {
     )
 
     if (audioPermissionState.value) {
-        // Permission granted, continue app functionality
-        // Your audio related code here
+        onAudioPermissionGranted.invoke()
     } else {
         Button(onClick = {
             if (!audioPermissionState.value) requestPermissionLauncher.launch(READ_MEDIA_AUDIO)
@@ -40,7 +39,7 @@ fun AudioPermissionRequestButton() {
 }
 
 @Composable
-fun NotificationPermissionRequestButton() {
+fun NotificationPermissionRequestButton(onNotificationPermissionGranted: () -> Unit = {}) {
     val context = LocalContext.current
     val notificationPermission = remember {
         mutableStateOf(ContextCompat.checkSelfPermission(context, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)
@@ -54,8 +53,7 @@ fun NotificationPermissionRequestButton() {
     )
 
     if (notificationPermission.value) {
-        // Permission granted, continue app functionality
-        // Your audio related code here
+        onNotificationPermissionGranted.invoke()
     } else {
         Button(onClick = {
             if (!notificationPermission.value) requestPermissionLauncher.launch(POST_NOTIFICATIONS)

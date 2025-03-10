@@ -7,7 +7,7 @@ data class Song (
     val title: String?,
     val artist: String?,
     val album: String?,
-    val albumId: Long?,
+    val albumArtUri: Uri?,
     val duration: Long?,
     val track: Int?,
     val year: Int?,

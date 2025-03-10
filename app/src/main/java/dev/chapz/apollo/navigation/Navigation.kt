@@ -11,7 +11,6 @@ import dev.chapz.apollo.ui.search.SearchScreen
 import dev.chapz.apollo.ui.settings.SettingsScreen
 import kotlinx.serialization.Serializable
 
-// Bottom navigation
 @Serializable
 object HomeNav
 
@@ -21,7 +20,6 @@ object SearchNav
 @Serializable
 object SettingsNav
 
-// Individual targets
 @Serializable
 object HomeDestination
 
@@ -32,9 +30,9 @@ object SearchDestination
 object SettingsDestination
 
 @Composable
-fun MainScreenView(
+fun NavigationWrapper(
     paddingValues: PaddingValues,
-    navController: NavHostController,
+    navController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = HomeNav) {
         navigation<HomeNav>(startDestination = HomeDestination) {
@@ -56,4 +54,3 @@ fun MainScreenView(
         }
     }
 }
-

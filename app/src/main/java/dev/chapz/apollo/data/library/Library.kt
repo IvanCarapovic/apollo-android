@@ -48,7 +48,7 @@ class Library(private val contentResolver: ContentResolver) {
                         cursor.getString(titleColumn),
                         cursor.getString(artistColumn),
                         cursor.getString(albumColumn),
-                        cursor.getLong(albumIdColumn),
+                        getAlbumArtworkUri(cursor.getLong(albumIdColumn)),
                         cursor.getLong(durationColumn),
                         cursor.getInt(trackColumn),
                         cursor.getInt(yearColumn),
@@ -60,7 +60,7 @@ class Library(private val contentResolver: ContentResolver) {
         return@withContext songs
     }
 
-    fun getAlbumArtworkUri(albumId: Long): Uri {
+    private fun getAlbumArtworkUri(albumId: Long): Uri {
         val albumUri = ContentUris.withAppendedId("content://media/external/audio/albumart".toUri(), albumId)
         return albumUri
     }

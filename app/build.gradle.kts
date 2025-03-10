@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.compose.junit)
     implementation(libs.compose.navigation)
     implementation(libs.compose.runtime.livedata)
+    implementation(libs.compose.material.icons)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.core)

@@ -3,18 +3,21 @@ package dev.chapz.apollo.ui.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -23,22 +26,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import coil.compose.SubcomposeAsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import dev.chapz.apollo.data.library.Library
 import dev.chapz.apollo.data.library.Song
 import dev.chapz.apollo.permissions.AudioPermissionRequestButton
 import dev.chapz.apollo.permissions.NotificationPermissionRequestButton
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun SongList(paddingValues: PaddingValues) {
+fun SongList() {
     val scope = rememberCoroutineScope()
-    val songs = remember { mutableStateListOf<Song>() }
     val library = Library(LocalContext.current.contentResolver)
+    val songs = remember { mutableStateListOf<Song>() }
 
-    Box(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
         AudioPermissionRequestButton { scope.launch { songs.addAll(library.getSongs()) } }
         NotificationPermissionRequestButton()
+
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(songs.size) { index ->
                 SongItem(songs[index])
@@ -50,23 +56,39 @@ fun SongList(paddingValues: PaddingValues) {
 @Preview
 @Composable
 fun SongItem(@PreviewParameter(SongProvider::class) song: Song) {
-    Row(modifier = Modifier.fillMaxWidth()) {
+    Row(modifier = Modifier.fillMaxWidth().padding(
+        vertical = 12.dp,
+        horizontal = 24.dp
+    )) {
         SubcomposeAsyncImage(
+            modifier = Modifier.size(48.dp).clip(
+                RoundedCornerShape(4.dp)
+            ),
             model = ImageRequest.Builder(LocalContext.current)
-                .size(128)
+                .size(64)
+                .decoderDispatcher(Dispatchers.IO)
+                .allowRgb565(true)
+                .diskCachePolicy(CachePolicy.ENABLED)
+                .diskCacheKey(song.albumArtUri.toString())
                 .data(song.albumArtUri)
-                .crossfade(true)
                 .build(),
             contentDescription = null,
-            modifier = Modifier.padding(8.dp),
+
         )
-        Column(verticalArrangement = Arrangement.Center) {
+        Column(
+            modifier = Modifier.padding(
+                start = 16.dp
+            ),
+            verticalArrangement = Arrangement.SpaceAround) {
             Text(
                 text = song.title ?: "",
-                fontSize = 18.sp
+                color = Color.White,
+                fontSize = 16.sp
             )
             Text(text = song.artist ?: "",
-                fontSize = 12.sp)
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
         }
     }
 }

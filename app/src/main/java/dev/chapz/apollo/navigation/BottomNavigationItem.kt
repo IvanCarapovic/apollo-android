@@ -1,9 +1,9 @@
 package dev.chapz.apollo.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.twotone.Home
+import androidx.compose.material.icons.twotone.Search
+import androidx.compose.material.icons.twotone.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class BottomNavigationItem(
@@ -16,17 +16,17 @@ data class BottomNavigationItem(
 val bottomNavigationItems = listOf(
     BottomNavigationItem(
         title = "Home",
-        icon = Icons.Filled.Home,
+        icon = Icons.TwoTone.Home,
         route = HomeDestination
     ),
     BottomNavigationItem(
         title = "Search",
-        icon = Icons.Filled.Search,
+        icon = Icons.TwoTone.Search,
         route = SearchDestination
     ),
     BottomNavigationItem(
         title = "Settings",
-        icon = Icons.Filled.Settings,
+        icon = Icons.TwoTone.Settings,
         route = SettingsDestination
     )
 )

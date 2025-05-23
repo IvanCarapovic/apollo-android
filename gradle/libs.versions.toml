@@ -12,6 +12,7 @@ navigationCompose = "2.9.0"
 koin = "4.0.3"
 media = "1.7.1"
 coilCompose = "2.5.0"
+mockk = "1.13.10"
 
 [libraries]
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
@@ -38,6 +39,8 @@ media-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media
 media-common = { group = "androidx.media3", name = "media3-common", version.ref = "media"}
 media-session = { group = "androidx.media3", name = "media3-session", version.ref = "media"}
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
+
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

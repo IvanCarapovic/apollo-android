@@ -2,12 +2,12 @@ package dev.chapz.apollo.data.library
 
 import android.content.ContentResolver
 import android.content.ContentUris
+import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import android.database.Cursor
 
 /**
  * Read local music collection and its metadata from the device such as
@@ -111,7 +111,7 @@ class Library(private val contentResolver: ContentResolver) {
 
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
-                val artworkUri = getAlbumArtworkUri(id) // Reusing your existing helper
+                val artworkUri = getAlbumArtworkUri(id)
 
                 albums.add(
                     Album(
@@ -126,6 +126,48 @@ class Library(private val contentResolver: ContentResolver) {
             }
         }
         return@withContext albums
+    }
+
+    /**
+     * Fetch a list of local artists from the device.
+     *
+     * @return a list of [Artist] objects with queried metadata
+     * */
+    suspend fun getArtists(): List<Artist> = withContext(Dispatchers.IO) {
+        val artists = mutableListOf<Artist>()
+        val collection = MediaStore.Audio.Artists.getContentUri(MediaStore.VOLUME_EXTERNAL)
+
+        val projection = arrayOf(
+            MediaStore.Audio.Artists._ID,
+            MediaStore.Audio.Artists.ARTIST,
+            MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
+            MediaStore.Audio.Artists.NUMBER_OF_TRACKS
+        )
+
+        val query = contentResolver.query(collection, projection, null, null, null)
+
+        query?.use { cursor ->
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID)
+            val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST)
+            val numAlbumsColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS)
+            val numTracksColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_TRACKS)
+
+            while (cursor.moveToNext()) {
+                val id = cursor.getInt(idColumn)
+                val artworkUri = null // load the artwork of one of the songs or albums of the artist
+
+                artists.add(
+                    Artist(
+                        id,
+                        cursor.getString(nameColumn),
+                        artworkUri,
+                        cursor.getInt(numAlbumsColumn),
+                        cursor.getInt(numTracksColumn)
+                    )
+                )
+            }
+        }
+        return@withContext artists
     }
 
     /**

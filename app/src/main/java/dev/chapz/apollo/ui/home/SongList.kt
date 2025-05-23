@@ -42,14 +42,13 @@ fun SongList() {
     val songs = remember { mutableStateListOf<Song>() }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        AudioPermissionRequestButton { scope.launch { songs.addAll(library.getSongs()) } }
-        NotificationPermissionRequestButton()
-
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(songs.size) { index ->
                 SongItem(songs[index])
             }
         }
+        AudioPermissionRequestButton { scope.launch { songs.addAll(library.getSongs()) } }
+        NotificationPermissionRequestButton()
     }
 }
 

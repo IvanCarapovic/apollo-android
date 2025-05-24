@@ -28,8 +28,8 @@ import androidx.core.net.toUri
 import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import dev.chapz.apollo.data.library.Album
 import dev.chapz.apollo.data.library.Library
+import dev.chapz.apollo.data.models.Album
 import dev.chapz.apollo.permissions.AudioPermissionRequestButton
 import dev.chapz.apollo.permissions.NotificationPermissionRequestButton
 import kotlinx.coroutines.Dispatchers
@@ -55,14 +55,20 @@ fun AlbumList() {
 @Preview
 @Composable
 fun AlbumItem(@PreviewParameter(AlbumProvider::class) album: Album) {
-    Row(modifier = Modifier.fillMaxWidth().padding(
-        vertical = 12.dp,
-        horizontal = 24.dp
-    )) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = 12.dp,
+                horizontal = 24.dp
+            )
+    ) {
         SubcomposeAsyncImage(
-            modifier = Modifier.size(48.dp).clip(
-                RoundedCornerShape(4.dp)
-            ),
+            modifier = Modifier
+                .size(48.dp)
+                .clip(
+                    RoundedCornerShape(4.dp)
+                ),
             model = ImageRequest.Builder(LocalContext.current)
                 .size(64)
                 .decoderDispatcher(Dispatchers.IO)
@@ -73,18 +79,20 @@ fun AlbumItem(@PreviewParameter(AlbumProvider::class) album: Album) {
                 .build(),
             contentDescription = null,
 
-        )
+            )
         Column(
             modifier = Modifier.padding(
                 start = 16.dp
             ),
-            verticalArrangement = Arrangement.SpaceAround) {
+            verticalArrangement = Arrangement.SpaceAround
+        ) {
             Text(
                 text = album.title,
                 color = Color.White,
                 fontSize = 16.sp
             )
-            Text(text = album.artist,
+            Text(
+                text = album.artist,
                 fontSize = 14.sp,
                 color = Color.Gray
             )

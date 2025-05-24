@@ -1,4 +1,4 @@
-package dev.chapz.apollo.data.library
+package dev.chapz.apollo.data.models
 
 import android.net.Uri
 
@@ -17,13 +17,13 @@ import android.net.Uri
  * @param year the year the song was released
  * @param path the path to the song file on the device
  * */
-data class Song (
+data class Song(
     val uri: Uri,
     val title: String?,
     val artist: String?,
-    val artistId: Int,
+    val artistId: Long,
     val album: String?,
-    val albumId: Int,
+    val albumId: Long,
     val albumArtUri: Uri?,
     val duration: Long?,
     val track: Int?,

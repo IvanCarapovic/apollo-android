@@ -69,4 +69,6 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
+
+    //androidTestImplementation(libs.mockk.android)
 }

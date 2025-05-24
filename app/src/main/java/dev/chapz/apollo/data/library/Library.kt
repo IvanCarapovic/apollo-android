@@ -6,12 +6,16 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.net.toUri
+import dev.chapz.apollo.data.models.Album
+import dev.chapz.apollo.data.models.Artist
+import dev.chapz.apollo.data.models.Genre
+import dev.chapz.apollo.data.models.Song
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
  * Read local music collection and its metadata from the device such as
- * [Song]s, [Album]s, artists, genres and playlists.
+ * [dev.chapz.apollo.data.models.Song]s, [dev.chapz.apollo.data.models.Album]s, artists, genres and playlists.
  *
  * All methods follow the same pattern:
  *
@@ -27,7 +31,7 @@ class Library(private val contentResolver: ContentResolver) {
     /**
      * Fetch a list of local songs from the device.
      *
-     * @return a list of [Song] objects with queried metadata
+     * @return a list of [dev.chapz.apollo.data.models.Song] objects with queried metadata
      * */
     suspend fun getSongs(): List<Song> = withContext(Dispatchers.IO) {
         val songs = mutableListOf<Song>()
@@ -68,9 +72,9 @@ class Library(private val contentResolver: ContentResolver) {
                         uri,
                         cursor.getString(titleColumn),
                         cursor.getString(artistColumn),
-                        cursor.getInt(artistIdColumn),
+                        cursor.getLong(artistIdColumn),
                         cursor.getString(albumColumn),
-                        cursor.getInt(albumIdColumn),
+                        cursor.getLong(albumIdColumn),
                         getAlbumArtworkUri(cursor.getLong(albumIdColumn)),
                         cursor.getLong(durationColumn),
                         cursor.getInt(trackColumn),
@@ -86,7 +90,7 @@ class Library(private val contentResolver: ContentResolver) {
     /**
      * Fetch a list of local albums from the device.
      *
-     * @return a list of [Album] objects with queried metadata
+     * @return a list of [dev.chapz.apollo.data.models.Album] objects with queried metadata
      * */
     suspend fun getAlbums(): List<Album> = withContext(Dispatchers.IO) {
         val albums = mutableListOf<Album>()
@@ -118,7 +122,7 @@ class Library(private val contentResolver: ContentResolver) {
                         id,
                         cursor.getString(titleColumn),
                         cursor.getString(artistColumn),
-                        cursor.getInt(artistIdColumn),
+                        cursor.getLong(artistIdColumn),
                         artworkUri,
                         cursor.getInt(numSongsColumn),
                     )
@@ -131,7 +135,7 @@ class Library(private val contentResolver: ContentResolver) {
     /**
      * Fetch a list of local artists from the device.
      *
-     * @return a list of [Artist] objects with queried metadata
+     * @return a list of [dev.chapz.apollo.data.models.Artist] objects with queried metadata
      * */
     suspend fun getArtists(): List<Artist> = withContext(Dispatchers.IO) {
         val artists = mutableListOf<Artist>()
@@ -171,6 +175,54 @@ class Library(private val contentResolver: ContentResolver) {
     }
 
     /**
+     * Fetch a list of local genres from the device.
+     *
+     * @return a list of [dev.chapz.apollo.data.models.Genre] objects with queried metadata
+     * */
+    suspend fun getGenres(): List<Genre> = withContext(Dispatchers.IO) {
+        val genres = mutableListOf<Genre>()
+        val collection = MediaStore.Audio.Genres.getContentUri(MediaStore.VOLUME_EXTERNAL)
+
+        val projection = arrayOf(
+            MediaStore.Audio.Genres._ID,
+            MediaStore.Audio.Genres.NAME
+        )
+
+        val query = contentResolver.query(collection, projection, null, null, null)
+
+        query?.use { cursor ->
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Genres._ID)
+            val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Genres.NAME)
+
+            while (cursor.moveToNext()) {
+                val genreId = cursor.getLong(idColumn)
+                val name = cursor.getString(nameColumn)
+                val numberOfSongs = getGenreSongCount(genreId)
+                genres.add(
+                    Genre(
+                        genreId,
+                        name,
+                        numberOfSongs
+                    )
+                )
+            }
+        }
+        return@withContext genres
+    }
+
+    /**
+     * Helper to count the number of songs in a genre.
+     */
+    private fun getGenreSongCount(genreId: Long): Int {
+        val uri = MediaStore.Audio.Genres.Members.getContentUri(MediaStore.VOLUME_EXTERNAL, genreId)
+        val projection = arrayOf(MediaStore.Audio.Genres.Members._ID)
+        val cursor = contentResolver.query(uri, projection, null, null, null)
+        val count = cursor?.count ?: 0
+        cursor?.close()
+        return count
+    }
+
+    /**
      * Fetch the album art URI of the given album.
      *
      * @param albumId The ID of the album.
@@ -181,3 +233,4 @@ class Library(private val contentResolver: ContentResolver) {
         return albumUri
     }
 }
+

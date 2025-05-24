@@ -1,4 +1,4 @@
-package dev.chapz.apollo.data.library
+package dev.chapz.apollo.data.models
 
 import android.net.Uri
 
@@ -16,7 +16,7 @@ data class Album(
     val albumId: Long,
     val title: String,
     val artist: String,
-    val artistId: Int,
+    val artistId: Long,
     val artworkUri: Uri?,
     val numberOfSongs: Int,
 )

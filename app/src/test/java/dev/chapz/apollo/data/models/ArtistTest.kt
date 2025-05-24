@@ -1,4 +1,4 @@
-package dev.chapz.apollo.data.library // Adjust to your package structure
+package dev.chapz.apollo.data.models // Adjust to your package structure
 
 import android.net.Uri
 import io.mockk.every

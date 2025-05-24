@@ -1,4 +1,4 @@
-package dev.chapz.apollo.data.library
+package dev.chapz.apollo.data.models
 
 import android.net.Uri
 

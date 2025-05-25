@@ -1,8 +1,9 @@
-package dev.chapz.apollo.ui.home
+package dev.chapz.apollo.ui.genres
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,12 +29,16 @@ import dev.chapz.apollo.permissions.NotificationPermissionRequestButton
 import kotlinx.coroutines.launch
 
 @Composable
-fun GenreList() {
+fun GenreList(paddingValues: PaddingValues) {
     val scope = rememberCoroutineScope()
     val library = Library(LocalContext.current.contentResolver)
     val genres = remember { mutableStateListOf<Genre>() }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+    ) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(genres.size) { index ->
                 GenreItem(genres[index])

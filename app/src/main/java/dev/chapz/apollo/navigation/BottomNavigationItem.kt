@@ -1,9 +1,11 @@
 package dev.chapz.apollo.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.Home
-import androidx.compose.material.icons.twotone.Search
-import androidx.compose.material.icons.twotone.Settings
+import androidx.compose.material.icons.automirrored.twotone.QueueMusic
+import androidx.compose.material.icons.twotone.Album
+import androidx.compose.material.icons.twotone.Audiotrack
+import androidx.compose.material.icons.twotone.Person
+import androidx.compose.material.icons.twotone.Speaker
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class BottomNavigationItem(
@@ -15,18 +17,28 @@ data class BottomNavigationItem(
 // Define the list of navigation items
 val bottomNavigationItems = listOf(
     BottomNavigationItem(
-        title = "Home",
-        icon = Icons.TwoTone.Home,
-        route = HomeDestination
+        title = "Songs",
+        icon = Icons.TwoTone.Audiotrack,
+        route = SongsDestination
     ),
     BottomNavigationItem(
-        title = "Search",
-        icon = Icons.TwoTone.Search,
-        route = SearchDestination
+        title = "Albums",
+        icon = Icons.TwoTone.Album,
+        route = AlbumsDestination
     ),
     BottomNavigationItem(
-        title = "Settings",
-        icon = Icons.TwoTone.Settings,
+        title = "Artists",
+        icon = Icons.TwoTone.Person,
+        route = ArtistsDestination
+    ),
+    BottomNavigationItem(
+        title = "Genres",
+        icon = Icons.TwoTone.Speaker,
+        route = GenreDestination,
+    ),
+    BottomNavigationItem(
+        title = "Playlists",
+        icon = Icons.AutoMirrored.TwoTone.QueueMusic,
         route = SettingsDestination
     )
 )

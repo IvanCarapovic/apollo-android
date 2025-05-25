@@ -20,15 +20,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-
             ApolloTheme(
                 darkTheme = isSystemInDarkTheme(),
-                dynamicColor = false,
+                dynamicColor = true,
                 content = {
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         topBar = {
-                            //Header()
+
                         },
                         bottomBar = {
                             BottomNavigationBar(navController)

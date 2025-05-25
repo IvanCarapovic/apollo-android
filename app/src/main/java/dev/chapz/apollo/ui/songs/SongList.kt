@@ -1,8 +1,9 @@
-package dev.chapz.apollo.ui.home
+package dev.chapz.apollo.ui.songs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,32 +30,36 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import dev.chapz.apollo.data.library.Library
-import dev.chapz.apollo.data.models.Album
+import dev.chapz.apollo.data.models.Song
 import dev.chapz.apollo.permissions.AudioPermissionRequestButton
 import dev.chapz.apollo.permissions.NotificationPermissionRequestButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun AlbumList() {
+fun SongList(paddingValues: PaddingValues) {
     val scope = rememberCoroutineScope()
     val library = Library(LocalContext.current.contentResolver)
-    val albums = remember { mutableStateListOf<Album>() }
+    val songs = remember { mutableStateListOf<Song>() }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+    ) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(albums.size) { index ->
-                AlbumItem(albums[index])
+            items(songs.size) { index ->
+                SongItem(songs[index])
             }
         }
-        AudioPermissionRequestButton { scope.launch { albums.addAll(library.getAlbums()) } }
+        AudioPermissionRequestButton { scope.launch { songs.addAll(library.getSongs()) } }
         NotificationPermissionRequestButton()
     }
 }
 
 @Preview
 @Composable
-fun AlbumItem(@PreviewParameter(AlbumProvider::class) album: Album) {
+fun SongItem(@PreviewParameter(SongProvider::class) song: Song) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -74,8 +79,8 @@ fun AlbumItem(@PreviewParameter(AlbumProvider::class) album: Album) {
                 .decoderDispatcher(Dispatchers.IO)
                 .allowRgb565(true)
                 .diskCachePolicy(CachePolicy.ENABLED)
-                .diskCacheKey(album.artworkUri.toString())
-                .data(album.artworkUri)
+                .diskCacheKey(song.albumArtUri.toString())
+                .data(song.albumArtUri)
                 .build(),
             contentDescription = null,
 
@@ -87,12 +92,12 @@ fun AlbumItem(@PreviewParameter(AlbumProvider::class) album: Album) {
             verticalArrangement = Arrangement.SpaceAround
         ) {
             Text(
-                text = album.title,
+                text = song.title ?: "",
                 color = Color.White,
                 fontSize = 16.sp
             )
             Text(
-                text = album.artist,
+                text = song.artist ?: "",
                 fontSize = 14.sp,
                 color = Color.Gray
             )
@@ -100,15 +105,20 @@ fun AlbumItem(@PreviewParameter(AlbumProvider::class) album: Album) {
     }
 }
 
-class AlbumProvider : PreviewParameterProvider<Album> {
-    override val values: Sequence<Album> = sequenceOf(
-        Album(
-            albumId = 0L,
+class SongProvider : PreviewParameterProvider<Song> {
+    override val values: Sequence<Song> = sequenceOf(
+        Song(
+            uri = "http://hello/kitty".toUri(),
             title = "Fuel",
             artist = "Eminem feat. JID",
             artistId = 2,
-            artworkUri = "http://album/art/1".toUri(),
-            10
+            album = "The Eminem Show",
+            albumId = 1,
+            albumArtUri = "http://album/art/1".toUri(),
+            duration = 1000 * 3 * 60L + 1000 * 25L,
+            track = 2,
+            year = 2024,
+            path = "content://something"
         )
     )
 }

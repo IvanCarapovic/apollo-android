@@ -11,8 +11,8 @@ import android.net.Uri
  * @param numberOfTracks The number of tracks by this artist on the device.
  */
 data class Artist(
-    val artistId: Int,
-    val name: String?,
+    val artistId: Long,
+    val name: String,
     val artworkUri: Uri?,
     val numberOfAlbums: Int,
     val numberOfTracks: Int

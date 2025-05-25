@@ -157,14 +157,13 @@ class Library(private val contentResolver: ContentResolver) {
             val numTracksColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_TRACKS)
 
             while (cursor.moveToNext()) {
-                val id = cursor.getInt(idColumn)
-                val artworkUri = null // load the artwork of one of the songs or albums of the artist
+                val id = cursor.getLong(idColumn)
 
                 artists.add(
                     Artist(
                         id,
                         cursor.getString(nameColumn),
-                        artworkUri,
+                        null,
                         cursor.getInt(numAlbumsColumn),
                         cursor.getInt(numTracksColumn)
                     )

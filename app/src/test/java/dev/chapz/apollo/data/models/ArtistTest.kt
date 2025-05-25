@@ -53,12 +53,6 @@ class ArtistTest {
     }
 
     @Test
-    fun `name returns null when null`() {
-        val artist = Artist(1, null, null, 2, 20)
-        assertNull(artist.name)
-    }
-
-    @Test
     fun `artworkUri returns correct value when not null`() {
         val artUriString = "content://media/external/audio/albumart/artist_art"
         val mockArtUri = mockUri(artUriString)
@@ -223,7 +217,7 @@ class ArtistTest {
     fun `toString handles null properties correctly`() {
         val artist = Artist(
             artistId = 1,
-            name = null,
+            name = "null",
             artworkUri = null,
             numberOfAlbums = 0,
             numberOfTracks = 0

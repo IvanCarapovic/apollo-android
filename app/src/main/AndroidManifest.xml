@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <!-- Used for showing the media notification on Android 12+ -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Used for playing media when the player is in the background -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Apollo">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -25,6 +29,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="dev.chapz.apollo.player.MediaPlayerService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback">
+            <intent-filter>
+                <action android:name="androidx.media3.session.MediaSessionService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

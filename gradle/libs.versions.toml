@@ -15,7 +15,7 @@ coilCompose = "2.5.0"
 mockk = "1.13.10"
 
 [libraries]
-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
+compose-bom = { module = "androidx.compose:compose-bom-alpha", version.ref = "composeBomVersion" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-m3 = { group = "androidx.compose.material3", name = "material3" }
 compose-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }

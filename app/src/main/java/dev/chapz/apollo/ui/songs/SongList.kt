@@ -1,6 +1,5 @@
 package dev.chapz.apollo.ui.songs
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,20 +21,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.MediaItem
 import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import dev.chapz.apollo.MainActivity
-import dev.chapz.apollo.MainViewModel
 import dev.chapz.apollo.data.library.Library
 import dev.chapz.apollo.data.models.Song
+import dev.chapz.apollo.getMediaController
 import dev.chapz.apollo.permissions.AudioPermissionRequestButton
 import dev.chapz.apollo.permissions.NotificationPermissionRequestButton
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +44,6 @@ fun SongList(paddingValues: PaddingValues) {
     val scope = rememberCoroutineScope()
     val library = Library(LocalContext.current.contentResolver)
     val songs = remember { mutableStateListOf<Song>() }
-    val viewModel: MainViewModel = viewModel(LocalActivity.current as MainActivity)
 
     Box(
         modifier = Modifier
@@ -55,7 +52,7 @@ fun SongList(paddingValues: PaddingValues) {
     ) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(songs.size) { index ->
-                SongItem(songs[index], viewModel)
+                SongItem(songs[index])
             }
         }
         AudioPermissionRequestButton { scope.launch { songs.addAll(library.getSongs()) } }
@@ -63,11 +60,10 @@ fun SongList(paddingValues: PaddingValues) {
     }
 }
 
+@Preview
 @Composable
-fun SongItem(
-    @PreviewParameter(SongProvider::class) song: Song,
-    viewModel: MainViewModel
-) {
+fun SongItem(@PreviewParameter(SongProvider::class) song: Song) {
+    val mediaController = LocalContext.current.getMediaController()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -78,8 +74,9 @@ fun SongItem(
             .clickable(
                 enabled = true,
                 onClick = {
-                    viewModel.mediaController.setMediaItem(MediaItem.fromUri(song.uri))
-                    viewModel.mediaController.prepare()
+                    mediaController.setMediaItem(MediaItem.fromUri(song.uri))
+                    mediaController.prepare()
+                    mediaController.play()
                 })
     ) {
         SubcomposeAsyncImage(

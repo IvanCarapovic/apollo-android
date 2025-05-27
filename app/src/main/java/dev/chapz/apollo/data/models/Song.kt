@@ -19,10 +19,10 @@ import android.net.Uri
  * */
 data class Song(
     val uri: Uri,
-    val title: String?,
-    val artist: String?,
+    val title: String = "Unknown title",
+    val artist: String = "Unknown artist",
     val artistId: Long,
-    val album: String?,
+    val album: String = "Unknown album",
     val albumId: Long,
     val albumArtUri: Uri?,
     val duration: Long?,

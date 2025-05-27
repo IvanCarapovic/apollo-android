@@ -73,21 +73,9 @@ class SongTest {
     }
 
     @Test
-    fun `title returns null when null`() {
-        val song = Song(mockUri("uri:song"), null, "Artist", 1, "Album", 10, null, 180L, 1, 2023, "/path")
-        assertNull(song.title)
-    }
-
-    @Test
     fun `artist returns correct value when not null`() {
         val song = Song(mockUri("uri:song"), "Title", "Artist Name", 1, "Album", 10, null, 180L, 1, 2023, "/path")
         assertEquals("Artist Name", song.artist)
-    }
-
-    @Test
-    fun `artist returns null when null`() {
-        val song = Song(mockUri("uri:song"), "Title", null, 1, "Album", 10, null, 180L, 1, 2023, "/path")
-        assertNull(song.artist)
     }
 
     @Test
@@ -100,12 +88,6 @@ class SongTest {
     fun `album returns correct value when not null`() {
         val song = Song(mockUri("uri:song"), "Title", "Artist", 1, "Album Name", 10, null, 180L, 1, 2023, "/path")
         assertEquals("Album Name", song.album)
-    }
-
-    @Test
-    fun `album returns null when null`() {
-        val song = Song(mockUri("uri:song"), "Title", "Artist", 1, null, 10, null, 180L, 1, 2023, "/path")
-        assertNull(song.album)
     }
 
     @Test
@@ -313,10 +295,7 @@ class SongTest {
 
         val song = Song(
             uri = mockSongUri,
-            title = null,
-            artist = null,
             artistId = 1, // Non-nullable
-            album = null,
             albumId = 1,  // Non-nullable
             albumArtUri = null,
             duration = null,
@@ -327,9 +306,9 @@ class SongTest {
         val stringRepresentation = song.toString()
 
         assertTrue(stringRepresentation.contains("uri=$songUriString"))
-        assertTrue(stringRepresentation.contains("title=null"))
-        assertTrue(stringRepresentation.contains("artist=null"))
-        assertTrue(stringRepresentation.contains("album=null"))
+        assertTrue(stringRepresentation.contains("title=Unknown title"))
+        assertTrue(stringRepresentation.contains("artist=Unknown artist"))
+        assertTrue(stringRepresentation.contains("album=Unknown album"))
         assertTrue(stringRepresentation.contains("albumArtUri=null"))
         assertTrue(stringRepresentation.contains("duration=null"))
         assertTrue(stringRepresentation.contains("track=null"))

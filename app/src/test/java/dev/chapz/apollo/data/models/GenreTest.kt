@@ -12,19 +12,19 @@ class GenreTest {
     @Test
     fun `genreId returns correct value`() {
         val genre = Genre(1L, "Rock", 42)
-        assertEquals(1L, genre.genreId)
+        assertEquals(1L, genre.id)
     }
 
     @Test
     fun `name returns correct value when not null`() {
         val genre = Genre(2L, "Jazz", 10)
-        assertEquals("Jazz", genre.name)
+        assertEquals("Jazz", genre.genre)
     }
 
     @Test
     fun `name returns null when null`() {
         val genre = Genre(3L, null, 5)
-        assertNull(genre.name)
+        assertNull(genre.genre)
     }
 
     @Test
@@ -83,9 +83,9 @@ class GenreTest {
     @Test
     fun `copy allows changing a specific property (e_g_ name)`() {
         val original = Genre(12L, "Old Name", 5)
-        val copied = original.copy(name = "New Name")
-        assertEquals("New Name", copied.name)
-        assertEquals(original.genreId, copied.genreId)
+        val copied = original.copy(genre = "New Name")
+        assertEquals("New Name", copied.genre)
+        assertEquals(original.id, copied.id)
         assertEquals(original.numberOfSongs, copied.numberOfSongs)
         assertNotEquals(original, copied)
     }

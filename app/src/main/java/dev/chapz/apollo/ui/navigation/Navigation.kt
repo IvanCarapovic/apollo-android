@@ -1,4 +1,4 @@
-package dev.chapz.apollo.navigation
+package dev.chapz.apollo.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import dev.chapz.apollo.app.MainViewModel
 import dev.chapz.apollo.ui.albums.AlbumList
 import dev.chapz.apollo.ui.artists.ArtistsList
 import dev.chapz.apollo.ui.genres.GenreList
@@ -45,13 +46,14 @@ object SettingsDestination
 
 @Composable
 fun NavigationWrapper(
+    mainViewModel: MainViewModel,
     paddingValues: PaddingValues,
     navController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = SongsNav) {
         navigation<SongsNav>(startDestination = SongsDestination) {
             composable<SongsDestination> {
-                SongList(paddingValues)
+                SongList(paddingValues, mainViewModel)
             }
         }
 

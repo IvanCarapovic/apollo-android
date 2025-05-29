@@ -21,12 +21,12 @@ data class Song(
     val uri: Uri,
     val title: String = "Unknown title",
     val artist: String = "Unknown artist",
-    val artistId: Long,
+    val artistId: Long = -1,
     val album: String = "Unknown album",
-    val albumId: Long,
-    val albumArtUri: Uri?,
-    val duration: Long?,
-    val track: Int?,
-    val year: Int?,
-    val path: String?
+    val albumId: Long = -1,
+    val albumArtUri: Uri? = null,
+    val duration: Long? = 0,
+    val track: Int? = 0,
+    val year: Int? = 0,
+    val path: String? = null
 )

@@ -84,7 +84,7 @@ fun GenreItem(@PreviewParameter(GenreProvider::class) genre: Genre) {
             verticalArrangement = Arrangement.SpaceAround
         ) {
             Text(
-                text = genre.name ?: "",
+                text = genre.genre ?: "",
                 color = Color.White,
                 fontSize = 16.sp
             )
@@ -100,8 +100,8 @@ fun GenreItem(@PreviewParameter(GenreProvider::class) genre: Genre) {
 class GenreProvider : PreviewParameterProvider<Genre> {
     override val values: Sequence<Genre> = sequenceOf(
         Genre(
-            genreId = 1L,
-            name = "Fuel",
+            id = 1L,
+            genre = "Fuel",
             numberOfSongs = 2024,
         )
     )

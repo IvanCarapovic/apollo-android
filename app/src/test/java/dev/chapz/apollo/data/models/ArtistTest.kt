@@ -43,13 +43,13 @@ class ArtistTest {
     @Test
     fun `id returns correct value`() {
         val artist = Artist(123, "Artist Name", null, 5, 50)
-        assertEquals(123, artist.artistId)
+        assertEquals(123, artist.id)
     }
 
     @Test
     fun `name returns correct value when not null`() {
         val artist = Artist(1, "Awesome Artist", null, 2, 20)
-        assertEquals("Awesome Artist", artist.name)
+        assertEquals("Awesome Artist", artist.artist)
     }
 
     @Test
@@ -161,10 +161,10 @@ class ArtistTest {
     @Test
     fun `copy allows changing a specific property (e_g_ name)`() {
         val original = Artist(10, "Old Name", null, 5, 55)
-        val copied = original.copy(name = "New Name")
+        val copied = original.copy(artist = "New Name")
 
-        assertEquals("New Name", copied.name)
-        assertEquals(original.artistId, copied.artistId) // Check other properties remain
+        assertEquals("New Name", copied.artist)
+        assertEquals(original.id, copied.id) // Check other properties remain
         assertEquals(original.numberOfAlbums, copied.numberOfAlbums)
         assertNotEquals(original, copied)
     }
@@ -198,8 +198,8 @@ class ArtistTest {
         // every { Uri.parse(artUriString) } returns mockArtUri // If needed
 
         val artist = Artist(
-            artistId = 42,
-            name = "The Best Artist",
+            id = 42,
+            artist = "The Best Artist",
             artworkUri = mockArtUri,
             numberOfAlbums = 10,
             numberOfTracks = 100
@@ -216,8 +216,8 @@ class ArtistTest {
     @Test
     fun `toString handles null properties correctly`() {
         val artist = Artist(
-            artistId = 1,
-            name = "null",
+            id = 1,
+            artist = "null",
             artworkUri = null,
             numberOfAlbums = 0,
             numberOfTracks = 0

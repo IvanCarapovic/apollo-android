@@ -1,4 +1,4 @@
-package dev.chapz.apollo.navigation
+package dev.chapz.apollo.ui.navigation
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar

@@ -86,7 +86,7 @@ fun ArtistItem(@PreviewParameter(AlbumProvider::class) artist: Artist) {
             verticalArrangement = Arrangement.SpaceAround
         ) {
             Text(
-                text = artist.name,
+                text = artist.artist,
                 color = Color.White,
                 fontSize = 16.sp
             )
@@ -102,7 +102,7 @@ fun ArtistItem(@PreviewParameter(AlbumProvider::class) artist: Artist) {
 class AlbumProvider : PreviewParameterProvider<Album> {
     override val values: Sequence<Album> = sequenceOf(
         Album(
-            albumId = 0L,
+            id = 0L,
             title = "Fuel",
             artist = "Eminem feat. JID",
             artistId = 2,

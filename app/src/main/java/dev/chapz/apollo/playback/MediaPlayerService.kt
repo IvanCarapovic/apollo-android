@@ -1,4 +1,4 @@
-package dev.chapz.apollo.player
+package dev.chapz.apollo.playback
 
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession

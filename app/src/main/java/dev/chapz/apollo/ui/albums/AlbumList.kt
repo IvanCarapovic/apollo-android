@@ -108,7 +108,7 @@ fun AlbumItem(@PreviewParameter(AlbumProvider::class) album: Album) {
 class AlbumProvider : PreviewParameterProvider<Album> {
     override val values: Sequence<Album> = sequenceOf(
         Album(
-            albumId = 0L,
+            id = 0L,
             title = "Fuel",
             artist = "Eminem feat. JID",
             artistId = 2,

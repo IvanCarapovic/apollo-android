@@ -1,4 +1,4 @@
-package dev.chapz.apollo.navigation
+package dev.chapz.apollo.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.twotone.QueueMusic

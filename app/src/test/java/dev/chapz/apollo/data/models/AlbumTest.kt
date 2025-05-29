@@ -41,20 +41,20 @@ class AlbumTest {
     @Test
     fun `albumId returns correct value`() {
         val album = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Test Title",
             artist = "Test Artist",
             artistId = 10,
             artworkUri = null,
             numberOfSongs = 5
         )
-        assertEquals(1L, album.albumId)
+        assertEquals(1L, album.id)
     }
 
     @Test
     fun `title returns correct value`() {
         val album = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Test Title",
             artist = "Test Artist",
             artistId = 10,
@@ -67,7 +67,7 @@ class AlbumTest {
     @Test
     fun `artist returns correct value`() {
         val album = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Test Title",
             artist = "Test Artist",
             artistId = 10,
@@ -80,7 +80,7 @@ class AlbumTest {
     @Test
     fun `artistId returns correct value`() {
         val album = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Test Title",
             artist = "Test Artist",
             artistId = 10,
@@ -98,7 +98,7 @@ class AlbumTest {
         every { Uri.parse(uriString) } returns mockUriInstance
 
         val album = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Test Title",
             artist = "Test Artist",
             artistId = 10,
@@ -111,7 +111,7 @@ class AlbumTest {
     @Test
     fun `artworkUri returns null when null`() {
         val album = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Test Title",
             artist = "Test Artist",
             artistId = 10,
@@ -124,7 +124,7 @@ class AlbumTest {
     @Test
     fun `numberOfSongs returns correct value`() {
         val album = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Test Title",
             artist = "Test Artist",
             artistId = 10,
@@ -141,7 +141,7 @@ class AlbumTest {
         every { Uri.parse(uriString) } returns mockUriInstance // Ensure parse is stubbed if it's called internally
 
         val album1 = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Title",
             artist = "Artist",
             artistId = 1,
@@ -149,7 +149,7 @@ class AlbumTest {
             numberOfSongs = 10
         )
         val album2 = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Title",
             artist = "Artist",
             artistId = 1,
@@ -162,16 +162,16 @@ class AlbumTest {
     @Test
     fun `equals returns false for different albumId`() {
         val album1 =
-            Album(albumId = 1L, title = "Title", artist = "Artist", artistId = 1, artworkUri = null, numberOfSongs = 10)
+            Album(id = 1L, title = "Title", artist = "Artist", artistId = 1, artworkUri = null, numberOfSongs = 10)
         val album2 =
-            Album(albumId = 2L, title = "Title", artist = "Artist", artistId = 1, artworkUri = null, numberOfSongs = 10)
+            Album(id = 2L, title = "Title", artist = "Artist", artistId = 1, artworkUri = null, numberOfSongs = 10)
         assertNotEquals(album1, album2)
     }
 
     @Test
     fun `equals returns false for different title`() {
         val album1 = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Title1",
             artist = "Artist",
             artistId = 1,
@@ -179,7 +179,7 @@ class AlbumTest {
             numberOfSongs = 10
         )
         val album2 = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Title2",
             artist = "Artist",
             artistId = 1,
@@ -196,9 +196,9 @@ class AlbumTest {
         every { Uri.parse(uriString) } returns mockUriInstance
 
         val album1 =
-            Album(albumId = 1L, title = "Title", artist = "Artist", artistId = 1, artworkUri = null, numberOfSongs = 10)
+            Album(id = 1L, title = "Title", artist = "Artist", artistId = 1, artworkUri = null, numberOfSongs = 10)
         val album2 = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Title",
             artist = "Artist",
             artistId = 1,
@@ -219,7 +219,7 @@ class AlbumTest {
         every { Uri.parse(uriString2) } returns mockUriInstance2
 
         val album1 = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Title",
             artist = "Artist",
             artistId = 1,
@@ -227,7 +227,7 @@ class AlbumTest {
             numberOfSongs = 10
         )
         val album2 = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Title",
             artist = "Artist",
             artistId = 1,
@@ -245,7 +245,7 @@ class AlbumTest {
         every { Uri.parse(uriString) } returns mockUriInstance
 
         val album1 = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Title",
             artist = "Artist",
             artistId = 1,
@@ -253,7 +253,7 @@ class AlbumTest {
             numberOfSongs = 10
         )
         val album2 = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Title",
             artist = "Artist",
             artistId = 1,
@@ -266,7 +266,7 @@ class AlbumTest {
     @Test
     fun `hashCode is different for unequal objects (usually)`() {
         val album1 = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Title1",
             artist = "Artist",
             artistId = 1,
@@ -274,7 +274,7 @@ class AlbumTest {
             numberOfSongs = 10
         )
         val album2 = Album(
-            albumId = 2L,
+            id = 2L,
             title = "Title2",
             artist = "ArtistB",
             artistId = 2,
@@ -291,7 +291,7 @@ class AlbumTest {
         every { Uri.parse(uriString) } returns mockUriInstance
 
         val original = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Original Title",
             artist = "Original Artist",
             artistId = 10,
@@ -307,7 +307,7 @@ class AlbumTest {
     @Test
     fun `copy allows changing a specific property`() {
         val original = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Original Title",
             artist = "Original Artist",
             artistId = 10,
@@ -316,7 +316,7 @@ class AlbumTest {
         )
         val copiedWithNewTitle = original.copy(title = "New Title")
 
-        assertEquals(1L, copiedWithNewTitle.albumId)
+        assertEquals(1L, copiedWithNewTitle.id)
         assertEquals("New Title", copiedWithNewTitle.title)
         assertEquals("Original Artist", copiedWithNewTitle.artist)
         // ... assertions for other properties
@@ -330,7 +330,7 @@ class AlbumTest {
         every { Uri.parse(uriString) } returns mockUriInstance
 
         val original = Album(
-            albumId = 1L,
+            id = 1L,
             title = "Title",
             artist = "Artist",
             artistId = 1,
@@ -340,7 +340,7 @@ class AlbumTest {
         val copied = original.copy(artworkUri = null)
 
         assertNull(copied.artworkUri)
-        assertEquals(original.albumId, copied.albumId)
+        assertEquals(original.id, copied.id)
     }
 
     @Test
@@ -350,11 +350,11 @@ class AlbumTest {
         every { Uri.parse(newUriString) } returns newMockUriInstance
 
         val original =
-            Album(albumId = 1L, title = "Title", artist = "Artist", artistId = 1, artworkUri = null, numberOfSongs = 5)
+            Album(id = 1L, title = "Title", artist = "Artist", artistId = 1, artworkUri = null, numberOfSongs = 5)
         val copied = original.copy(artworkUri = newMockUriInstance)
 
         assertEquals(newMockUriInstance, copied.artworkUri)
-        assertEquals(original.albumId, copied.albumId)
+        assertEquals(original.id, copied.id)
     }
 
     @Test
@@ -364,7 +364,7 @@ class AlbumTest {
         every { Uri.parse(uriString) } returns mockUriInstance
 
         val album = Album(
-            albumId = 7L,
+            id = 7L,
             title = "Album Seven",
             artist = "Artist Seven",
             artistId = 77,
@@ -382,7 +382,7 @@ class AlbumTest {
     @Test
     fun `toString handles null artworkUri`() {
         val album = Album(
-            albumId = 8L,
+            id = 8L,
             title = "Album Eight",
             artist = "Artist Eight",
             artistId = 88,

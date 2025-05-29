@@ -96,8 +96,8 @@ class GenreTest {
     fun `toString contains property values`() {
         val genre = Genre(13L, "Reggae", 17)
         val stringRepresentation = genre.toString()
-        assertTrue(stringRepresentation.contains("genreId=13"))
-        assertTrue(stringRepresentation.contains("name=Reggae"))
+        assertTrue(stringRepresentation.contains("id=13"))
+        assertTrue(stringRepresentation.contains("genre=Reggae"))
         assertTrue(stringRepresentation.contains("numberOfSongs=17"))
     }
 
@@ -105,8 +105,8 @@ class GenreTest {
     fun `toString handles null name correctly`() {
         val genre = Genre(14L, null, 0)
         val stringRepresentation = genre.toString()
-        assertTrue(stringRepresentation.contains("genreId=14"))
-        assertTrue(stringRepresentation.contains("name=null"))
+        assertTrue(stringRepresentation.contains("id=14"))
+        assertTrue(stringRepresentation.contains("genre=null"))
         assertTrue(stringRepresentation.contains("numberOfSongs=0"))
     }
 }

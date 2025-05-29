@@ -206,8 +206,8 @@ class ArtistTest {
         )
         val stringRepresentation = artist.toString()
 
-        assertTrue(stringRepresentation.contains("artistId=42"))
-        assertTrue(stringRepresentation.contains("name=The Best Artist"))
+        assertTrue(stringRepresentation.contains("id=42"))
+        assertTrue(stringRepresentation.contains("artist=The Best Artist"))
         assertTrue(stringRepresentation.contains("artworkUri=$artUriString"))
         assertTrue(stringRepresentation.contains("numberOfAlbums=10"))
         assertTrue(stringRepresentation.contains("numberOfTracks=100"))
@@ -224,8 +224,8 @@ class ArtistTest {
         )
         val stringRepresentation = artist.toString()
 
-        assertTrue(stringRepresentation.contains("artistId=1"))
-        assertTrue(stringRepresentation.contains("name=null"))
+        assertTrue(stringRepresentation.contains("id=1"))
+        assertTrue(stringRepresentation.contains("artist=null"))
         assertTrue(stringRepresentation.contains("artworkUri=null"))
         assertTrue(stringRepresentation.contains("numberOfAlbums=0"))
         assertTrue(stringRepresentation.contains("numberOfTracks=0"))

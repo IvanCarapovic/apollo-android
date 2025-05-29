@@ -373,7 +373,7 @@ class AlbumTest {
         )
         val stringRepresentation = album.toString()
 
-        assertTrue(stringRepresentation.contains("albumId=7"))
+        assertTrue(stringRepresentation.contains("id=7"))
         assertTrue(stringRepresentation.contains("title=Album Seven"))
         // ... other assertions
         assertTrue(stringRepresentation.contains("artworkUri=$uriString")) // Check against the string value

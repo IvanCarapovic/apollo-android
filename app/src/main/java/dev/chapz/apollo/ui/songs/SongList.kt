@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -32,8 +33,6 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import dev.chapz.apollo.app.MainViewModel
 import dev.chapz.apollo.data.library.Library
-import dev.chapz.apollo.permissions.AudioPermissionRequestButton
-import dev.chapz.apollo.permissions.NotificationPermissionRequestButton
 import kotlinx.coroutines.launch
 import kotlin.system.measureTimeMillis
 
@@ -64,32 +63,32 @@ fun SongList(
                 )
             }
         }
-        AudioPermissionRequestButton {
-            scope.launch {
-                val time = measureTimeMillis {
-                    songs.addAll(
-                        library.getSongs()
-                            .sortedBy { it.title }
-                            .map { song ->
-                                val mediaItem = MediaItem.fromUri(song.uri)
-                                mediaItem.mediaMetadata = MediaMetadata.Builder()
-                                    .setTitle(song.title)
-                                    .setAlbumTitle(song.album)
-                                    .setArtist(song.artist)
-                                    .setIsPlayable(true)
-                                    .setIsBrowsable(false)
-                                    .setDisplayTitle(song.title)
-                                    //.setArtworkUri(song.albumArtUri)
-                                    .build()
-                                mediaItem
-                            })
-                }
-                viewModel.apolloPLayer.mediaController.setMediaItems(songs, true)
-                viewModel.apolloPLayer.mediaController.prepare()
-                Log.i("PERFORMANCE", "Building songs took $time ms")
+    }
+
+    LaunchedEffect(Unit) {
+        scope.launch {
+            val time = measureTimeMillis {
+                songs.addAll(
+                    library.getSongs()
+                        .sortedBy { it.title }
+                        .map { song ->
+                            val mediaItem = MediaItem.fromUri(song.uri)
+                            mediaItem.mediaMetadata = MediaMetadata.Builder()
+                                .setTitle(song.title)
+                                .setAlbumTitle(song.album)
+                                .setArtist(song.artist)
+                                .setIsPlayable(true)
+                                .setIsBrowsable(false)
+                                .setDisplayTitle(song.title)
+                                //.setArtworkUri(song.albumArtUri)
+                                .build()
+                            mediaItem
+                        })
             }
+            viewModel.apolloPLayer.mediaController.setMediaItems(songs, true)
+            viewModel.apolloPLayer.mediaController.prepare()
+            Log.i("PERFORMANCE", "Building songs took $time ms")
         }
-        NotificationPermissionRequestButton()
     }
 }
 

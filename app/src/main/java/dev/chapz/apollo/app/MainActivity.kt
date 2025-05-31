@@ -32,7 +32,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
+import dev.chapz.apollo.permissions.AudioPermissionRequestButton
+import dev.chapz.apollo.permissions.NotificationPermissionRequestButton
 import dev.chapz.apollo.ui.songs.SongList
 import dev.chapz.apollo.ui.theme.ApolloTheme
 
@@ -45,24 +46,44 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val navController = rememberNavController()
-
             ApolloTheme {
                 Scaffold(
-                    topBar = {},
-                    floatingActionButton = {
-
-                    },
-                    bottomBar = {},
                     content = { padding ->
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             content = {
-                                SongList(
-                                    paddingValues = padding,
-                                    viewModel = viewModel,
+                                val permissionsState = viewModel.permissionsGranted.collectAsState()
+
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(padding),
+                                    contentAlignment = Alignment.Center,
+                                    content = {
+                                        if (!permissionsState.value.first) {
+                                            AudioPermissionRequestButton {
+                                                viewModel.permissionsGranted.value =
+                                                    Pair(true, viewModel.permissionsGranted.value.second)
+                                            }
+                                        }
+
+                                        if (!permissionsState.value.second) {
+                                            NotificationPermissionRequestButton {
+                                                viewModel.permissionsGranted.value =
+                                                    Pair(viewModel.permissionsGranted.value.first, true)
+                                            }
+                                        }
+                                    }
                                 )
-                                PlaybackControls(padding)
+
+                                if (permissionsState.value.first && permissionsState.value.second) {
+                                    SongList(
+                                        paddingValues = padding,
+                                        viewModel = viewModel,
+                                    )
+                                    PlaybackControls(padding)
+                                }
+
                             }
                         )
                     }

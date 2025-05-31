@@ -6,16 +6,13 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.net.toUri
-import dev.chapz.apollo.data.models.Album
-import dev.chapz.apollo.data.models.Artist
-import dev.chapz.apollo.data.models.Genre
 import dev.chapz.apollo.data.models.Song
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
  * Read local music collection and its metadata from the device such as
- * [dev.chapz.apollo.data.models.Song]s, [dev.chapz.apollo.data.models.Album]s, artists, genres and playlists.
+ * [dev.chapz.apollo.data.models.Song]s.
  *
  * All methods follow the same pattern:
  *
@@ -85,140 +82,6 @@ class Library(private val contentResolver: ContentResolver) {
             }
         }
         return@withContext songs
-    }
-
-    /**
-     * Fetch a list of local albums from the device.
-     *
-     * @return a list of [dev.chapz.apollo.data.models.Album] objects with queried metadata
-     * */
-    suspend fun getAlbums(): List<Album> = withContext(Dispatchers.IO) {
-        val albums = mutableListOf<Album>()
-        val collection = MediaStore.Audio.Albums.getContentUri(MediaStore.VOLUME_EXTERNAL)
-
-        val projection = arrayOf(
-            MediaStore.Audio.Albums._ID,
-            MediaStore.Audio.Albums.ALBUM,
-            MediaStore.Audio.Albums.ARTIST,
-            MediaStore.Audio.Albums.ARTIST_ID,
-            MediaStore.Audio.Albums.NUMBER_OF_SONGS,
-        )
-
-        val query = contentResolver.query(collection, projection, null, null, null)
-
-        query?.use { cursor ->
-            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID)
-            val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM)
-            val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ARTIST)
-            val artistIdColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ARTIST_ID)
-            val numSongsColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.NUMBER_OF_SONGS)
-
-            while (cursor.moveToNext()) {
-                val id = cursor.getLong(idColumn)
-                val artworkUri = getAlbumArtworkUri(id)
-
-                albums.add(
-                    Album(
-                        id,
-                        cursor.getString(titleColumn),
-                        cursor.getString(artistColumn),
-                        cursor.getLong(artistIdColumn),
-                        artworkUri,
-                        cursor.getInt(numSongsColumn),
-                    )
-                )
-            }
-        }
-        return@withContext albums
-    }
-
-    /**
-     * Fetch a list of local artists from the device.
-     *
-     * @return a list of [dev.chapz.apollo.data.models.Artist] objects with queried metadata
-     * */
-    suspend fun getArtists(): List<Artist> = withContext(Dispatchers.IO) {
-        val artists = mutableListOf<Artist>()
-        val collection = MediaStore.Audio.Artists.getContentUri(MediaStore.VOLUME_EXTERNAL)
-
-        val projection = arrayOf(
-            MediaStore.Audio.Artists._ID,
-            MediaStore.Audio.Artists.ARTIST,
-            MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
-            MediaStore.Audio.Artists.NUMBER_OF_TRACKS
-        )
-
-        val query = contentResolver.query(collection, projection, null, null, null)
-
-        query?.use { cursor ->
-            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID)
-            val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST)
-            val numAlbumsColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS)
-            val numTracksColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_TRACKS)
-
-            while (cursor.moveToNext()) {
-                val id = cursor.getLong(idColumn)
-
-                artists.add(
-                    Artist(
-                        id,
-                        cursor.getString(nameColumn),
-                        null,
-                        cursor.getInt(numAlbumsColumn),
-                        cursor.getInt(numTracksColumn)
-                    )
-                )
-            }
-        }
-        return@withContext artists
-    }
-
-    /**
-     * Fetch a list of local genres from the device.
-     *
-     * @return a list of [dev.chapz.apollo.data.models.Genre] objects with queried metadata
-     * */
-    suspend fun getGenres(): List<Genre> = withContext(Dispatchers.IO) {
-        val genres = mutableListOf<Genre>()
-        val collection = MediaStore.Audio.Genres.getContentUri(MediaStore.VOLUME_EXTERNAL)
-
-        val projection = arrayOf(
-            MediaStore.Audio.Genres._ID,
-            MediaStore.Audio.Genres.NAME
-        )
-
-        val query = contentResolver.query(collection, projection, null, null, null)
-
-        query?.use { cursor ->
-            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Genres._ID)
-            val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Genres.NAME)
-
-            while (cursor.moveToNext()) {
-                val genreId = cursor.getLong(idColumn)
-                val name = cursor.getString(nameColumn)
-                val numberOfSongs = getGenreSongCount(genreId)
-                genres.add(
-                    Genre(
-                        genreId,
-                        name,
-                        numberOfSongs
-                    )
-                )
-            }
-        }
-        return@withContext genres
-    }
-
-    /**
-     * Helper to count the number of songs in a genre.
-     */
-    private fun getGenreSongCount(genreId: Long): Int {
-        val uri = MediaStore.Audio.Genres.Members.getContentUri(MediaStore.VOLUME_EXTERNAL, genreId)
-        val projection = arrayOf(MediaStore.Audio.Genres.Members._ID)
-        val cursor = contentResolver.query(uri, projection, null, null, null)
-        val count = cursor?.count ?: 0
-        cursor?.close()
-        return count
     }
 
     /**

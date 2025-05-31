@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     val apolloPLayer = ApolloPlayer()
     val nowPlayingIndex = MutableStateFlow(0)
+    var permissionsGranted = MutableStateFlow(Pair(false, false))
 
     init {
         viewModelScope.launch {

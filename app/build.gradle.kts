@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "dev.chapz.apollo"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "dev.chapz.apollo"

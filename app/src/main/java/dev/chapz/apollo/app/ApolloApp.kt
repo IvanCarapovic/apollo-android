@@ -1,17 +1,38 @@
 package dev.chapz.apollo.app
 
 import android.app.Application
-import android.content.Intent
 import android.os.StrictMode
-import dev.chapz.apollo.playback.MediaPlayerService
+import dev.chapz.apollo.data.library.Library
+import dev.chapz.apollo.playback.ApolloPlayer
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
+import org.koin.core.module.dsl.viewModel
+import org.koin.dsl.module
 
 class ApolloApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
-        // start the MediaPlayerService as early as possible
-        startService(Intent(this, MediaPlayerService::class.java))
+        val viewmodelModule = module {
+            viewModel { MainViewModel(this@ApolloApp) }
+        }
+
+        val mediaModule = module {
+            single { ApolloPlayer() }
+            single { Library(contentResolver) }
+        }
+
+        startKoin {
+            androidLogger(Level.WARNING)
+            androidContext(this@ApolloApp)
+            modules(
+                mediaModule,
+                viewmodelModule
+            )
+        }
 
         applyDevelopmentStrictMode()
     }

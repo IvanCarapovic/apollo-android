@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,7 +27,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -36,10 +34,11 @@ import dev.chapz.apollo.permissions.AudioPermissionRequestButton
 import dev.chapz.apollo.permissions.NotificationPermissionRequestButton
 import dev.chapz.apollo.ui.songs.SongList
 import dev.chapz.apollo.ui.theme.ApolloTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,10 +76,7 @@ class MainActivity : ComponentActivity() {
                                 )
 
                                 if (permissionsState.value.first && permissionsState.value.second) {
-                                    SongList(
-                                        paddingValues = padding,
-                                        viewModel = viewModel,
-                                    )
+                                    SongList(paddingValues = padding)
                                     PlaybackControls(padding)
                                 }
 
@@ -94,7 +90,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun PlaybackControls(paddingValues: PaddingValues) {
-        val isPlaying = viewModel.apolloPLayer.isPlaying.collectAsState()
+        val isPlaying = viewModel.player.isPlaying.collectAsState()
         val buttonSize = 86.dp
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -108,7 +104,6 @@ class MainActivity : ComponentActivity() {
                         )
                         .align(Alignment.BottomCenter)
                 ) {
-                    val scope = rememberCoroutineScope()
                     IconButton(
                         modifier = Modifier
                             .size(buttonSize)
@@ -119,10 +114,8 @@ class MainActivity : ComponentActivity() {
                         ),
                         shape = MaterialShapes.Square.toShape(),
                         onClick = {
-                            if (viewModel.apolloPLayer.mediaController.hasPreviousMediaItem()) {
-                                viewModel.apolloPLayer.mediaController.seekToPrevious()
-                                viewModel.nowPlayingIndex.value =
-                                    viewModel.apolloPLayer.mediaController.currentMediaItemIndex
+                            if (viewModel.player.mediaController.hasPreviousMediaItem()) {
+                                viewModel.player.mediaController.seekToPrevious()
                             }
                         },
                         content = {
@@ -139,13 +132,13 @@ class MainActivity : ComponentActivity() {
                             .padding(vertical = 8.dp, horizontal = 4.dp),
                         onClick = {
                             if (isPlaying.value) {
-                                viewModel.apolloPLayer.mediaController.pause()
+                                viewModel.player.mediaController.pause()
                             } else {
-                                if (viewModel.apolloPLayer.playerState.value == PlaybackState.STATE_NONE) {
-                                    viewModel.apolloPLayer.mediaController.prepare()
-                                    viewModel.apolloPLayer.mediaController.play()
+                                if (viewModel.player.playerState.value == PlaybackState.STATE_NONE) {
+                                    viewModel.player.mediaController.prepare()
+                                    viewModel.player.mediaController.play()
                                 } else {
-                                    viewModel.apolloPLayer.mediaController.play()
+                                    viewModel.player.mediaController.play()
                                 }
                             }
                         },
@@ -167,10 +160,8 @@ class MainActivity : ComponentActivity() {
                             .size(buttonSize)
                             .padding(start = 4.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
                         onClick = {
-                            if (viewModel.apolloPLayer.mediaController.hasNextMediaItem()) {
-                                viewModel.apolloPLayer.mediaController.seekToNext()
-                                viewModel.nowPlayingIndex.value =
-                                    viewModel.apolloPLayer.mediaController.currentMediaItemIndex
+                            if (viewModel.player.mediaController.hasNextMediaItem()) {
+                                viewModel.player.mediaController.seekToNext()
                             }
                         },
                         colors = IconButtonDefaults.iconButtonColors(

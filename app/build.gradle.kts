@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "dev.chapz.apollo"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "dev.chapz.apollo"
@@ -74,6 +74,7 @@ dependencies {
 
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
 
     implementation(libs.coil.compose)
 

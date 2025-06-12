@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,15 +33,16 @@ import androidx.media3.common.MediaMetadata
 import dev.chapz.apollo.app.MainViewModel
 import dev.chapz.apollo.data.library.Library
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import kotlin.system.measureTimeMillis
 
 @Composable
 fun SongList(
     paddingValues: PaddingValues,
-    viewModel: MainViewModel,
+    viewModel: MainViewModel = koinInject(),
+    library: Library = koinInject()
 ) {
     val scope = rememberCoroutineScope()
-    val library = Library(LocalContext.current.contentResolver)
     val songs = remember { mutableStateListOf<MediaItem>() }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -57,7 +57,6 @@ fun SongList(
         ) {
             items(songs.size) { index ->
                 SongItem(
-                    viewModel = viewModel,
                     songs = songs,
                     index = index,
                 )
@@ -85,8 +84,8 @@ fun SongList(
                             mediaItem
                         })
             }
-            viewModel.apolloPLayer.mediaController.setMediaItems(songs, true)
-            viewModel.apolloPLayer.mediaController.prepare()
+            viewModel.player.mediaController.setMediaItems(songs, true)
+            viewModel.player.mediaController.prepare()
             Log.i("PERFORMANCE", "Building songs took $time ms")
         }
     }
@@ -94,13 +93,13 @@ fun SongList(
 
 @Composable
 fun SongItem(
-    viewModel: MainViewModel,
     songs: List<MediaItem>,
     index: Int,
+    viewModel: MainViewModel = koinInject(),
     curveTopShape: Boolean = index == 0,
     curveBottomShape: Boolean = index == songs.size - 1,
 ) {
-    val nowPlayingIndex = viewModel.nowPlayingIndex.collectAsState()
+    val nowPlayingIndex = viewModel.player.nowPlayingIndex.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
     Row(
@@ -125,9 +124,8 @@ fun SongItem(
                 enabled = true,
                 onClick = {
                     coroutineScope.launch {
-                        viewModel.apolloPLayer.mediaController.seekTo(index, 0)
-                        viewModel.apolloPLayer.mediaController.play()
-                        viewModel.nowPlayingIndex.value = index
+                        viewModel.player.mediaController.seekTo(index, 0)
+                        viewModel.player.mediaController.play()
                     }
                 })
     ) {

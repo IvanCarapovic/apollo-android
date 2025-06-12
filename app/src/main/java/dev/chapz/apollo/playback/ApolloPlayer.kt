@@ -3,11 +3,11 @@ package dev.chapz.apollo.playback
 import android.content.ComponentName
 import android.content.Context
 import androidx.core.content.ContextCompat
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.util.concurrent.atomic.AtomicBoolean
 
 class ApolloPlayer : Player.Listener {
 
@@ -16,7 +16,7 @@ class ApolloPlayer : Player.Listener {
         get() = _mediaController
     val playerState = MutableStateFlow(0)
     val isPlaying = MutableStateFlow(false)
-    var isReady = AtomicBoolean(false)
+    val nowPlayingIndex = MutableStateFlow(0)
 
     fun initPlayer(context: Context) {
         val sessionToken = SessionToken(context, ComponentName(context, MediaPlayerService::class.java))
@@ -25,7 +25,6 @@ class ApolloPlayer : Player.Listener {
             _mediaController = mediaControllerFuture.get()
             _mediaController.prepare()
             _mediaController.addListener(this)
-            isReady.set(true)
         }, ContextCompat.getMainExecutor(context))
     }
 
@@ -34,4 +33,8 @@ class ApolloPlayer : Player.Listener {
         isPlaying.value = player.isPlaying
     }
 
+    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+        // when the song changes, regardless of manual or automatic, update the nowPlayingIndex
+        nowPlayingIndex.value = mediaController.currentMediaItemIndex
+    }
 }
